@@ -16,6 +16,7 @@ import Header from 'app/components/Header';
 import UtilArea from 'app/components/UtilArea';
 // Routes
 import Payment from 'app/pages/Payment';
+import { PaymentProvider } from 'app/pages/Payment/context';
 
 import { withContext } from 'app/utils/context';
 
@@ -40,7 +41,7 @@ const App = ({ context }) => {
       },
     },
     typography: {
-      htmlFontSize: ctxTheme.font.size,
+      htmlFontSize: +(ctxTheme.font.size.replace('px', '')),
       fontFamily: ctxTheme.font.family,
     },
   });
@@ -49,6 +50,7 @@ const App = ({ context }) => {
     body {
       font-family: ${ctxTheme.font.family};
       background: ${ctxTheme.colors.paper.secondary};
+      margin: 0;
     }
   `;
 
@@ -59,7 +61,9 @@ const App = ({ context }) => {
       <UtilArea>
         <BrowserRouter>
           <Switch>
-            <Route path="/checkout/payment" component={Payment} />
+            <PaymentProvider>
+              <Route path="/checkout/payment" component={Payment} />
+            </PaymentProvider>
             <Redirect to="/checkout/payment" />
           </Switch>
         </BrowserRouter>

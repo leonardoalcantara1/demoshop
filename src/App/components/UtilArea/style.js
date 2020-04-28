@@ -6,9 +6,10 @@ export const UtilAreaComponent = withContext(
     margin-top: ${({ context }) => context.theme.dimensions.headerHeight};
     background: ${({ context }) => context.theme.colors.paper.secondary};
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    justify-content: center;
     padding: 16px;
+    min-height: ${({ context }) => `calc(100vh - ${context.theme.dimensions.headerHeight})`};
   `,
 );
 
