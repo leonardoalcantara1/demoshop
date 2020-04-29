@@ -45,8 +45,8 @@ export const CheckoutArea = withContext(
     }
 
     .title {
-      margin-top: 53px;
-      margin-bottom: 32px;
+      margin-top: 42px;
+      margin-bottom: 26px;
       h6 {
         line-height: 1.4em;
       }
@@ -63,11 +63,25 @@ export const LeftSide = withContext(
 );
 
 export const FormContainer = styled.form`
-  padding: 50px 64px 50px 0;
+  margin-top: 30px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   .submit {
     margin-top: 60px;
+  }
+  .MuiFormLabel-root {
+    z-index: 10;
+    cursor: text;
+    .cvv-label {
+      display: inline-flex;
+      align-items: center;
+      height: 15px;
+      svg {
+        width: 13px;
+        margin-left: 4px;
+        cursor: pointer;
+      }
+    }
   }
 `;

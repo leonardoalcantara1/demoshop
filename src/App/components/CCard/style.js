@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import cardActive from './cardActive.svg';
 import cardInactive from './cardInactive.svg';
+import cvvArea from './cvvArea.gif';
 
 export const CCardComponent = styled.div`
   width: 365px;
@@ -8,12 +9,19 @@ export const CCardComponent = styled.div`
   background: url(${({ active }) => (!active ? cardInactive : cardActive)}) no-repeat top center;
   background-size: 100%;
   font-family: 'SF Pro Text', sans-serif;
+  color: white;
   text-shadow: 0px 1px 2px #000000B3;
   display: flex;
   justify-content: flex-end;
   flex-direction: column;
   box-sizing: border-box;
   padding: 38px 27px;
+  position: relative;
+
+  .ccard-brand {
+    position: absolute;
+    top: 35px;
+  }
 
   .ccard-number {
     font-size: 27px;
@@ -43,6 +51,45 @@ export const CCardComponent = styled.div`
   &.verse {
     animation: flipV 0.5s ease;
     transform: scale(1) rotateY(180deg);
+    &:before {
+      content: ' ';
+      position: absolute;
+      left: 1px;
+      top: 42px;
+      height: 50px;
+      width: calc(100% - 1px);
+      background: black;
+      animation: fade 0.5s ease;
+    }
+
+    .cvvArea {
+      width: 186px;
+      height: 24px;
+      background: url(${cvvArea});
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 62px;
+      .numberArea {
+        width: 60px;
+        height: 24px;
+        background: white;
+        color: black;
+        text-shadow: none;
+        font-size: 19px;
+        line-height: 22px;
+        letter-spacing: 4px;
+        text-align: center;
+      }
+    }
+  }
+
+  @keyframes fade {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 
   @keyframes flipF {

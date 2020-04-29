@@ -1,8 +1,15 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 // Exclusive form to payment page. Is not a common component
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Grid,
+  Tooltip,
 } from '@material-ui/core';
+import {
+  Info,
+} from '@material-ui/icons';
+import { maskJs } from 'mask-js';
 import {
   TextField,
   Button,
@@ -15,31 +22,117 @@ const formatMoney = (value = 0) => value.toLocaleString('pt-BR', {
   currency: 'BRL',
 });
 
+const cvvRef = React.createRef();
+
 const Form = ({ paymentCtx }) => {
+  const [numberError, setNumberError] = useState(false);
+  const [nameError, setNameError] = useState(false);
+  const [expiresError, setExpiresError] = useState(false);
+  const [cvvError, setCVVError] = useState(false);
   const submit = (e) => {
     e.preventDefault();
+    setNumberError(false);
+    setNameError(false);
+    setExpiresError(false);
+    setCVVError(false);
+    const {
+      ccardNumber,
+      ccardName,
+      ccardExpires,
+      ccardCVV,
+      ccardBrand,
+      installments,
+    } = paymentCtx.state;
+
+    let error = false;
+
+    if (!ccardBrand) {
+      error = true;
+      setNumberError(true);
+    }
+
+    if (!ccardName.match(/^[\w]{2,30}\s[\w]/)) {
+      error = true;
+      setNameError(true);
+    }
+
+    if (!(
+      // eslint-disable-next-line no-restricted-globals
+      ccardExpires.length === 5 && !isNaN(new Date(`${ccardExpires.split('/')[0]}/01/${ccardExpires.split('/')[1]}`))
+    )) {
+      error = true;
+      setExpiresError(true);
+    }
+
+    if (ccardCVV.length < 3) {
+      error = true;
+      setCVVError(true);
+    }
+
+    if (!error) {
+      const data = {
+        ccardNumber,
+        ccardName,
+        ccardExpires,
+        ccardCVV,
+        installments,
+      };
+
+      console.log('submit form', data);
+    }
   };
   return (
     <FormContainer onSubmit={submit}>
       <TextField
+        error={numberError}
+        helperText={numberError && 'Número de cartão inválido'}
         label="Número do Cartão"
         onFocus={() => paymentCtx.methods.toggleVerse(false)}
+        onChange={(e) => paymentCtx.methods.setCCardNumber(maskJs('9999 9999 9999 9999', e.target.value))}
+        value={paymentCtx.state.ccardNumber}
+        inputProps={{
+          autoFocus: true,
+        }}
       />
       <TextField
+        error={nameError}
+        helperText={nameError && 'Insira seu nome completo'}
         label="Nome (igual ao cartão)"
+        value={paymentCtx.state.ccardName}
+        onChange={(e) => paymentCtx.methods.setCCardName(e.target.value.toUpperCase())}
         onFocus={() => paymentCtx.methods.toggleVerse(false)}
       />
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <TextField
+            error={expiresError}
+            helperText={expiresError && 'Data inválida'}
             label="Validade"
-            onFocus={() => paymentCtx.methods.toggleVerse(true)}
+            onFocus={() => paymentCtx.methods.toggleVerse(false)}
+            onChange={(e) => paymentCtx.methods.setCCardExpires(maskJs('99/99', e.target.value))}
+            value={paymentCtx.state.ccardExpires}
           />
         </Grid>
         <Grid item xs={6}>
           <TextField
-            label="CVV"
+            error={cvvError}
+            helperText={cvvError && 'Código inválido'}
+            label={(
+              <span className="cvv-label" onClick={() => cvvRef.current.focus()}>
+                <span className="text">
+                  CVV
+                </span>
+                <Tooltip title="3 dígitos atrás do cartão" placement="top">
+                  <Info />
+                </Tooltip>
+              </span>
+            )}
             onFocus={() => paymentCtx.methods.toggleVerse(true)}
+            onChange={(e) => paymentCtx.methods.setCCardCVV(maskJs('999', e.target.value))}
+            value={paymentCtx.state.ccardCVV}
+            inputProps={{
+              ref: cvvRef,
+            }}
           />
         </Grid>
       </Grid>
@@ -49,6 +142,8 @@ const Form = ({ paymentCtx }) => {
         SelectProps={{
           native: true,
         }}
+        value={paymentCtx.state.installments}
+        onChange={(e) => paymentCtx.methods.setInstallments(+e.target.value)}
       >
         {
           ([
@@ -66,7 +161,7 @@ const Form = ({ paymentCtx }) => {
           ))
         }
       </TextField>
-      <Button color="primary" variant="contained" className="submit">
+      <Button color="primary" variant="contained" className="submit" type="submit">
         CONTINUAR
       </Button>
     </FormContainer>

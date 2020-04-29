@@ -20,27 +20,34 @@ export const Button = styled(MUIButton)`
   }
 `;
 
-export const TextField = withContext((props) => {
-  const inputProps = { ...props };
-  delete inputProps.context;
-
+export const TextField = withContext(({ context, ...inputProps }) => {
   const [Component, setComponent] = useState();
 
   useEffect(() => {
     setComponent(
       withStyles({
         root: {
+          '&': {
+            marginTop: 24,
+            marginBottom: 16,
+          },
           '& .MuiInput-underline:before': {
             borderBottomWidth: 2,
-            borderBottomColor: props.context.theme.colors.text2,
+            borderBottomColor: context.theme.colors.text2,
+          },
+          '& .MuiInputLabel-formControl': {
+            fontSize: '1.06em',
           },
           '& .MuiInputLabel-formControl:not(.Mui-focused)': {
-            color: props.context.theme.colors.text2,
+            color: context.theme.colors.text2,
+          },
+          '& .MuiInputBase-input': {
+            height: '1.3em',
           },
         },
       })(MUITextField),
     );
-  }, [props.context]);
+  }, [context]);
   return Component ? (
     <Component
       fullWidth
