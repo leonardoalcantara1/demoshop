@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'build')));
 
-app.post('/payment', (req, res) => {
+app.post('/pagar', (req, res) => {
   console.log(req.body);
   return res.send({
     success: true,
