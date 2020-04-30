@@ -13,4 +13,13 @@ export const HeaderComponent = withContext(styled.header`
   display: flex;
   align-items: center;
   justify-content: center;
+  @media (max-width: ${({ context }) => context.theme.breakpoints.md - 1}px) {
+    height: auto;
+    padding: 12px 0;
+    text-align: center;
+    position: static;
+    img {
+      height: 30px;
+    }
+  }
 `);

@@ -27,7 +27,7 @@ export const TextField = withContext(({ context, ...inputProps }) => {
     setComponent(
       withStyles({
         root: {
-          '&': {
+          [`@media (min-width: ${context.theme.breakpoints.md})`]: {
             marginTop: 24,
             marginBottom: 16,
           },

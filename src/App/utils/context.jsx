@@ -23,6 +23,11 @@ const lightTheme = {
     headerHeight: '90px',
     utilArea: '1366px',
   },
+  breakpoints: {
+    lg: 1280,
+    md: 960,
+    sm: 600,
+  },
 };
 
 export const AppProvider = ({ children }) => {

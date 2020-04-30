@@ -9,11 +9,15 @@ import {
 } from '@material-ui/icons';
 import CCard from 'app/components/CCard';
 import Stepper from 'app/components/Stepper';
+import Breakpoint from 'app/components/Breakpoint';
+import CompactStepper from 'app/components/CompactStepper';
 import {
   Container,
   CheckoutArea,
   LeftSide,
   CartArea,
+  RightSide,
+  BackButton,
 } from './style';
 import Form from './Form';
 import { withPaymentCtx } from './context';
@@ -21,23 +25,33 @@ import paymentIcon from './paymentIcon.svg';
 
 const Payment = ({ paymentCtx }) => (
   <Container>
-    <Grid container spacing={2}>
-      <Grid item lg={9}>
+    <Grid container spacing={2} className="payment-grid-container">
+      <Grid item lg={9} md={12} xs={12} className="checkout-container">
         <CheckoutArea>
           <LeftSide lg={4}>
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<ArrowLeft />}
-              className="back"
-            >
-              Alterar forma de pagamento
-            </Button>
+            <Breakpoint sm>
+              <BackButton>
+                <ArrowLeft />
+              </BackButton>
+            </Breakpoint>
+            <Breakpoint md lg>
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<ArrowLeft />}
+                className="back"
+              >
+                Alterar forma de pagamento
+              </Button>
+            </Breakpoint>
+            <Breakpoint sm>
+              <CompactStepper variant="body2" step={2} totalSteps={3} />
+            </Breakpoint>
             <Grid container spacing={1} className="title">
-              <Grid item>
+              <Grid item style={{ display: 'flex', alignItems: 'center' }}>
                 <img src={paymentIcon} alt="" />
               </Grid>
-              <Grid item xs>
+              <Grid item xs className="text">
                 <Typography variant="h6">
                   <b>Adicione um novo cartão de crédito</b>
                 </Typography>
@@ -52,21 +66,27 @@ const Payment = ({ paymentCtx }) => (
               brand={paymentCtx.state.ccardBrand}
             />
           </LeftSide>
-          <Grid
-            item
+          <Breakpoint lg md>
+            <Grid item md={1}>
+              &nbsp;
+            </Grid>
+          </Breakpoint>
+          <RightSide
             lg={6}
-            style={{
-              padding: '50px 64px 50px 0',
-            }}
+            md
           >
-            <Stepper step={1} />
+            <Breakpoint lg md>
+              <Stepper step={1} />
+            </Breakpoint>
             <Form />
-          </Grid>
+          </RightSide>
         </CheckoutArea>
       </Grid>
-      <Grid item lg={3}>
-        <CartArea />
-      </Grid>
+      <Breakpoint lg>
+        <Grid item lg={3}>
+          <CartArea />
+        </Grid>
+      </Breakpoint>
     </Grid>
   </Container>
 );

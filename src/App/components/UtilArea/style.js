@@ -10,6 +10,12 @@ export const UtilAreaComponent = withContext(
     justify-content: center;
     padding: 16px;
     min-height: ${({ context }) => `calc(100vh - ${context.theme.dimensions.headerHeight})`};
+    box-sizing: border-box;
+    @media (max-width: ${({ context }) => context.theme.breakpoints.md - 1}px) {
+      padding: 0;
+      margin-top: 0;
+      min-height: initial;
+    }
   `,
 );
 

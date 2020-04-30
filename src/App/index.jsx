@@ -51,6 +51,9 @@ const App = ({ context }) => {
       font-family: ${ctxTheme.font.family};
       background: ${ctxTheme.colors.paper.secondary};
       margin: 0;
+      @media (max-width: ${ctxTheme.breakpoints.md - 1}px) {
+        background: ${ctxTheme.colors.paper.primary};
+      }
     }
   `;
 

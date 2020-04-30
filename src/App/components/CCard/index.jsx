@@ -33,7 +33,7 @@ const CCard = ({
     timeout = setTimeout(() => setVerseData(verse), 250);
   }, [verse]);
   return (
-    <CCardComponent className={verse ? 'verse' : 'front'} active={!!brand}>
+    <CCardComponent className={verse ? 'ccard-component verse' : 'ccard-component front'} active={!!brand}>
       {
         !verseData ? (
           <div className="front-data">
