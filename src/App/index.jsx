@@ -1,11 +1,5 @@
 import React from 'react';
 import {
-  BrowserRouter,
-  Switch,
-  Route,
-  Redirect,
-} from 'react-router-dom';
-import {
   ThemeProvider,
   createMuiTheme,
 } from '@material-ui/core';
@@ -62,14 +56,9 @@ const App = ({ context }) => {
       <GlobalStyle context={context} />
       <Header />
       <UtilArea>
-        <BrowserRouter>
-          <Switch>
-            <PaymentProvider>
-              <Route path="/checkout/payment" component={Payment} />
-            </PaymentProvider>
-            <Redirect to="/checkout/payment" />
-          </Switch>
-        </BrowserRouter>
+        <PaymentProvider>
+          <Payment />
+        </PaymentProvider>
       </UtilArea>
     </ThemeProvider>
   );

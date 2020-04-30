@@ -9,6 +9,10 @@ import {
 import {
   Info,
 } from '@material-ui/icons';
+import {
+  Alert,
+  AlertTitle,
+} from '@material-ui/lab';
 import { maskJs } from 'mask-js';
 import {
   TextField,
@@ -16,6 +20,7 @@ import {
 } from 'app/components/material';
 import { withPaymentCtx } from './context';
 import { FormContainer } from './style';
+import { payWithCCard } from './services';
 
 const formatMoney = (value = 0) => value.toLocaleString('pt-BR', {
   style: 'currency',
@@ -29,8 +34,11 @@ const Form = ({ paymentCtx }) => {
   const [nameError, setNameError] = useState(false);
   const [expiresError, setExpiresError] = useState(false);
   const [cvvError, setCVVError] = useState(false);
-  const submit = (e) => {
+  const [requestError, setRequestError] = useState(null);
+
+  const submit = async (e) => {
     e.preventDefault();
+    setRequestError(null);
     setNumberError(false);
     setNameError(false);
     setExpiresError(false);
@@ -78,7 +86,12 @@ const Form = ({ paymentCtx }) => {
         installments,
       };
 
-      console.log('submit form', data);
+      try {
+        await payWithCCard(data);
+        setRequestError(false);
+      } catch (err) {
+        setRequestError(err.message);
+      }
     }
   };
   return (
@@ -90,6 +103,7 @@ const Form = ({ paymentCtx }) => {
         onFocus={() => paymentCtx.methods.toggleVerse(false)}
         onChange={(e) => paymentCtx.methods.setCCardNumber(maskJs('9999 9999 9999 9999', e.target.value))}
         value={paymentCtx.state.ccardNumber}
+        type="tel"
         inputProps={{
           autoFocus: true,
         }}
@@ -111,6 +125,7 @@ const Form = ({ paymentCtx }) => {
             onFocus={() => paymentCtx.methods.toggleVerse(false)}
             onChange={(e) => paymentCtx.methods.setCCardExpires(maskJs('99/99', e.target.value))}
             value={paymentCtx.state.ccardExpires}
+            type="tel"
           />
         </Grid>
         <Grid item xs={6}>
@@ -133,6 +148,7 @@ const Form = ({ paymentCtx }) => {
             inputProps={{
               ref: cvvRef,
             }}
+            type="tel"
           />
         </Grid>
       </Grid>
@@ -161,6 +177,22 @@ const Form = ({ paymentCtx }) => {
           ))
         }
       </TextField>
+      {
+        requestError && (
+          <Alert severity="error" style={{ width: '100%', boxSizing: 'border-box' }}>
+            <AlertTitle>Erro no pagamento</AlertTitle>
+            {requestError}
+          </Alert>
+        )
+      }
+      {
+        requestError === false && (
+          <Alert severity="success" style={{ width: '100%', boxSizing: 'border-box' }}>
+            <AlertTitle>Sucesso!</AlertTitle>
+            O pagamento foi efetuado e em breve receberá a confirmação em seu e-mail
+          </Alert>
+        )
+      }
       <Button color="primary" variant="contained" className="submit" type="submit">
         CONTINUAR
       </Button>

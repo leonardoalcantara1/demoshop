@@ -56,20 +56,23 @@ export const CCardComponent = withContext(
       }
     }
 
-    &.front, &.verse {
-      transition: 0.5s ease;
-      filter: brightness(100%);
+    @media (min-width: ${({ context }) => context.theme.breakpoints.md}px) {
+      &.front, &.verse {
+        transition: 0.5s ease;
+        filter: brightness(100%);
+      }
+      &.front {
+        animation: flipF 0.5s ease;
+        transform: scale(1) rotateY(0deg);
+      }
+  
+      &.verse {
+        animation: flipV 0.5s ease;
+        transform: scale(1) rotateY(180deg);
+      }
     }
     
-    &.front {
-      animation: flipF 0.5s ease;
-      transform: scale(1) rotateY(0deg);
-    }
-
-    &.verse {
-      animation: flipV 0.5s ease;
-      transform: scale(1) rotateY(180deg);
-      &:before {
+      &.verse:before {
         content: ' ';
         position: absolute;
         left: 1px;
@@ -77,7 +80,13 @@ export const CCardComponent = withContext(
         height: 50px;
         width: calc(100% - 1px);
         background: black;
-        animation: fade 0.5s ease;
+        @media (min-width: ${({ context }) => context.theme.breakpoints.md}px) {
+          animation: fade 0.5s ease;
+        }
+        @media (max-width: ${({ context }) => context.theme.breakpoints.md - 1}px) {
+          height: 40px;
+          top: 28px;
+        }
       }
 
       .cvvArea {
@@ -97,6 +106,15 @@ export const CCardComponent = withContext(
           line-height: 22px;
           letter-spacing: 4px;
           text-align: center;
+        }
+        @media (max-width: ${({ context }) => context.theme.breakpoints.md - 1}px) {
+          height: 20px;
+          margin-bottom: 30px;
+          .numberArea {
+            height: 18px;
+            font-size: 16px;
+            line-height: 20px;
+          }
         }
       }
     }
@@ -140,7 +158,9 @@ export const CCardComponent = withContext(
     }
 
     .verse-data {
-      transform: rotateY(180deg);
+      @media (min-width: ${({ context }) => context.theme.breakpoints.md}px) {
+        transform: rotateY(180deg);
+      }
     }
   `,
 );

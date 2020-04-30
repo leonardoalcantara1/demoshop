@@ -162,6 +162,7 @@ export const FormContainer = withContext(
       @media (max-width: ${({ context }) => context.theme.breakpoints.md - 1}px) {
         width: 100%;
         margin-top: 24px;
+        margin-bottom: 24px;
       }
     }
     .MuiFormLabel-root {
